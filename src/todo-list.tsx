@@ -1,16 +1,14 @@
-import { For } from 'solid-js';
-import { createStore } from 'solid-js/store';
-
+import react, {useState, useRef} from 'react'
 type Todo = { id: number; text: string; completed: boolean };
 
 export const TodoList = () => {
-  let input!: HTMLInputElement;
-  const [todos, setTodos] = createStore<Todo[]>([]);
+  const input = useRef();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const addTodo = (text: string) => {
-    setTodos(todos.length, { id: todos.length, text, completed: false });
+    setTodos(todos => [...todos, { id: todos.length, text, completed: false }]);
   };
   const toggleTodo = (id: number) => {
-    setTodos(id, 'completed', (c) => !c);
+    setTodos(todos => todos.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo));
   };
 
   return (
@@ -18,36 +16,35 @@ export const TodoList = () => {
       <div>
         <input placeholder="new todo here" ref={input} />
         <button
-          onClick={() => {
-            if (!input.value.trim()) return;
-            addTodo(input.value);
-            input.value = '';
+          onClick={(e) => {
+            if (!input.current.value.trim()) return;
+            addTodo(input.current.value);
+            input.current.value = ''
           }}
         >
           Add Todo
         </button>
       </div>
-      <For each={todos}>
-        {(todo) => {
+      {todos.map((todo) => {
           const { id, text } = todo;
           return (
-            <div>
+            <div key={id}>
               <input
                 type="checkbox"
                 checked={todo.completed}
-                onchange={[toggleTodo, id]}
+                onChange={() => toggleTodo(id)}
               />
               <span
                 style={{
-                  'text-decoration': todo.completed ? 'line-through' : 'none',
+                  textDecoration: todo.completed ? 'line-through' : 'none',
                 }}
               >
                 {text}
               </span>
             </div>
           );
-        }}
-      </For>
+        })
+      }
     </>
   );
 };

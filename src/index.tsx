@@ -1,13 +1,8 @@
-import { render } from 'solid-js/web';
-
+import react from 'react';
+import { createRoot } from 'react-dom/client';
 import { TodoList } from './todo-list';
 
-const root = document.getElementById('root');
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
-  throw new Error(
-    'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',
-  );
-}
-
-render(() => <TodoList />, root!);
+root.render(<TodoList />);

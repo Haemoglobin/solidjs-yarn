@@ -1,16 +1,16 @@
-import { render, fireEvent } from '@solidjs/testing-library';
+import { render, fireEvent } from '@testing-library/react';
 
 import { TodoList } from './todo-list';
 
 describe('<TodoList />', () => {
   test('it will render an text input and a button', () => {
-    const { getByPlaceholderText, getByText } = render(() => <TodoList />);
+    const { getByPlaceholderText, getByText } = render(<TodoList />);
     expect(getByPlaceholderText('new todo here')).toBeInTheDocument();
     expect(getByText('Add Todo')).toBeInTheDocument();
   });
 
   test('it will add a new todo', async () => {
-    const { getByPlaceholderText, getByText } = render(() => <TodoList />);
+    const { getByPlaceholderText, getByText } = render(<TodoList />);
     const input = getByPlaceholderText('new todo here') as HTMLInputElement;
     const button = getByText('Add Todo');
     input.value = 'test new todo';
@@ -20,9 +20,7 @@ describe('<TodoList />', () => {
   });
 
   test('it will mark a todo as completed', async () => {
-    const { getByPlaceholderText, findByRole, getByText } = render(() => (
-      <TodoList />
-    ));
+    const { getByPlaceholderText, findByRole, getByText } = render(<TodoList />);
     const input = getByPlaceholderText('new todo here') as HTMLInputElement;
     const button = getByText('Add Todo') as HTMLButtonElement;
     input.value = 'mark new todo as completed';
